@@ -240,8 +240,6 @@ pub:
     5e:ff:ff:93:17
 ASN1 OID: prime256v1
 NIST CURVE: P-256
-
-
 ```
 
 P-256 (also known as _secp256r1_ or _prime256v1_) and P-384 (_secp384r1_).
