@@ -1,0 +1,49 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+  - name: Prerequisites
+    apt:
+      name:
+      - apt-transport-https
+      - ca-certificates
+      - gnupg2
+      - software-properties-common
+      - lsb-release
+      update_cache: yes
+      state: present
+  - name: Add Docker GPG key to keyrings
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      keyring: /usr/share/keyrings/ubuntu-docker.gpg
+  - name: Add Docker repository
+    apt_repository:
+      repo: deb [arch=amd64 signed-by=/usr/share/keyrings/ubuntu-docker.gpg] https://download.docker.com/linux/ubuntu jammy stable
+      filename: docker.list
+  - name: Actually install docker engine, docker cli, docker compose plugin and containerd
+    apt:
+      name:
+      - docker-ce
+      - docker-ce-cli
+      - docker-compose-plugin
+      - containerd.io
+      update_cache: yes
+  - name: Add vagrant to docker group
+    user:
+      groups: docker
+      name: vagrant
+      append: yes
+  - name: Copy docker.service to VM
+    copy:
+      src: "{{ item.src }}" 
+      dest: "{{ item.dest }}"
+    loop:
+    - { src: "./docker.service", dest: "/lib/systemd/system/docker.service" }
+    - { src: "./certs/.docker", dest: "/home/vagrant/" }
+  - name: Enable docker service and start sevice
+    systemd:
+      name: docker.service
+      state: restarted
+      daemon_reload: yes
