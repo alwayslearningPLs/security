@@ -29,13 +29,13 @@ After this procedure, we can access our docker using the following:
 
 ```sh
 # Using docker context (new feature)
-docker context create insecure-docker --description "insecure docker" --docker="tcp://192.168.56.10:2375"
+docker context create insecure-docker --description "insecure docker" --docker="host=tcp://192.168.56.10:2375"
 
 docker context use insecure-docker
 
 docker image pull alpine:3.16
 
-# or using Docker Environment DOCKER_HOST
-DOCKER_HOST=192.168.56.10 docker image pull alpine:3.15
+# or using Docker parameters
+docker -H tcp://192.168.56.30:2375 image pull alpine:3.15
 ```
 
