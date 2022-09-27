@@ -1,4 +1,4 @@
-# Docker on insecure port over TCP
+# Docker on secure port over TCP using mutual TLS
 
 We can expose the docker daemon in a lot of ways (unix socket, fd or TCP socket).
 
